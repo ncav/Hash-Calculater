@@ -1,0 +1,33 @@
+import hashlib
+import os
+
+def calculate_sha256(file_path):
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        # Read and update hash string value in blocks of 4K
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
+
+def calculate_all_sha256(directory):
+    sha256_hashes = {}
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            sha256_hashes[file] = calculate_sha256(file_path)
+    return sha256_hashes
+
+# Calculate SHA256 hashes for all files in C:\Windows\System32
+hashes = calculate_all_sha256(r"C:\Windows\System32")
+
+# Print the hashes
+for file, hash in hashes.items():
+    print(f"{file}: {hash}")
+This script calculates the SHA256 hash for all the files in a given directory (in this case, C:\Windows\System32). It uses the hashlib module to calculate the SHA256 hash, and the os module to walk through all the files in the directory.
+
+To get a list of all the software installed on a Windows operating system, you could modify this script to search the directories where software is typically installed (e.g., C:\Program Files, C:\Program Files (x86), etc.). You could also use the Windows Registry to get a list of installed software, and then search for the corresponding files on the filesystem.
+
+
+
+
+#modify this script to search the directories where software is typically installed (e.g., C:\Program Files, C:\Program Files (x86) or win registry
